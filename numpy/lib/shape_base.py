@@ -728,12 +728,12 @@ def _replace_zero_by_x_arrays(sub_arys):
     return sub_arys
 
 
-def _array_split_dispatcher(ary, indices_or_sections, axis=None):
+def _array_split_dispatcher(ary, indices_or_sections, axis=None, two_dimensional=None):
     return (ary, indices_or_sections)
 
 
 @array_function_dispatch(_array_split_dispatcher)
-def array_split(ary, indices_or_sections, axis=0):
+def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
     """
     Split an array into multiple sub-arrays.
 
@@ -788,12 +788,12 @@ def array_split(ary, indices_or_sections, axis=0):
     return sub_arys
 
 
-def _split_dispatcher(ary, indices_or_sections, axis=None):
+def _split_dispatcher(ary, indices_or_sections, axis=None, two_dimensional=None):
     return (ary, indices_or_sections)
 
 
 @array_function_dispatch(_split_dispatcher)
-def split(ary, indices_or_sections, axis=0):
+def split(ary, indices_or_sections, axis=0, two_dimensional=False):
     """
     Split an array into multiple sub-arrays as views into `ary`.
 
@@ -859,14 +859,38 @@ def split(ary, indices_or_sections, axis=0):
      array([], dtype=float64)]
 
     """
-    try:
-        len(indices_or_sections)
-    except TypeError:
-        sections = indices_or_sections
-        N = ary.shape[axis]
-        if N % sections:
+
+    def verify_equal_division(indices_or_sections, axis):
+        try:
+            len(indices_or_sections)
+        except TypeError:
+            N = ary.shape[axis]
+            if N % indices_or_sections:
+                raise ValueError(
+                    'array split does not result in an equal division')
+
+
+    if two_dimensional:
+        try:
+            len(indices_or_sections)
+        except:
             raise ValueError(
-                'array split does not result in an equal division')
+                'indices_or_sections must be a list of length 2.')
+        if len(indices_or_sections) == 2 and verify_equal_division(indices_or_sections[0], 0) and verify_equal_division(indices_or_sections[1], 1):
+            return array_split(ary, indices_or_sections, axis, two_dimensional=True)
+
+
+
+
+    verify_equal_division(indices_or_sections, axis)
+    # try:
+    #     len(indices_or_sections)
+    # except TypeError:
+    #     sections = indices_or_sections
+    #     N = ary.shape[axis]
+    #     if N % sections:
+    #         raise ValueError(
+    #             'array split does not result in an equal division')
     return array_split(ary, indices_or_sections, axis)
 
 
