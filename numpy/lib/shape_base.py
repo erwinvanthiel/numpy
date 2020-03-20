@@ -761,14 +761,12 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
     """
     if two_dimensional:
         try:
-            len(indices_or_sections)
-            first = indices_or_sections[0]
-            second = indices_or_sections[1]
-        except TypeError or AttributeError:
+            indices_or_sections[1]
+        except AttributeError:
             raise ValueError('indices_or_sections must be an array of length 2.')
 
-        subarray = array_split(ary, first, axis=0, two_dimensional=False)
-        return array_split(subarray, second, axis=1, two_dimensional=False)
+        subarray = array_split(ary, indices_or_sections[0], axis=0, two_dimensional=False)
+        return array_split(subarray, indices_or_sections[1], axis=1, two_dimensional=False)
 
     try:
         Ntotal = ary.shape[axis]
@@ -879,15 +877,15 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
             if N % indices_or_sections:
                 raise ValueError(
                     'array split does not result in an equal division')
-
+        return True
 
     if two_dimensional:
         try:
-            len(indices_or_sections)
-        except:
+            indices_or_sections[1]
+        except AttributeError:
             raise ValueError(
                 'indices_or_sections must be a list of length 2.')
-        if len(indices_or_sections) == 2 and verify_equal_division(indices_or_sections[0], 0) and verify_equal_division(indices_or_sections[1], 1):
+        if verify_equal_division(indices_or_sections[0], 0) and verify_equal_division(indices_or_sections[1], 1):
             return array_split(ary, indices_or_sections, axis, two_dimensional=True)
 
     verify_equal_division(indices_or_sections, axis)
