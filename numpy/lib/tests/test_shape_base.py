@@ -318,6 +318,59 @@ class TestExpandDims:
 
 
 class TestArraySplit:
+
+
+    def test_two_dimensional_two_integer_split(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+
+        res = array_split(matrix, [4, 2], 0, True)
+        desired = [
+            [[0, 1]],
+            [[2, 3]],
+            [[4, 5]],
+            [[6, 7]],
+            [[8, 9]],
+            [[10, 11]],
+            [[12, 13]],
+            [[14, 15]]
+        ]
+        compare_results(res, desired)
+
+    def test_two_dimensional_two_indices_split(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+
+        res = array_split(matrix, [[2], [2, 3]], 0, True)
+        desired = [
+            [[0, 1], [4, 5]],
+            [[2], [6]],
+            [[3], [7]],
+            [[8,  9], [12, 13]],
+            [[10], [14]],
+            [[11], [15]]
+        ]
+
+        compare_results(res, desired)
+
+    def test_two_dimensional_one_index_one_integer_split(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+
+        res = array_split(matrix, [2, [2, 3]], 0, True)
+        desired = [
+            [[0, 1], [4, 5]],
+            [[2], [6]],
+            [[3], [7]],
+            [[8,  9], [12, 13]],
+            [[10], [14]],
+            [[11], [15]]
+        ]
+
+        compare_results(res, desired)
+
+    def test_two_dimensional_input_guard(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+        assert_raises(ValueError, array_split, matrix, 1, two_dimensional=True)
+        assert_raises(ValueError, array_split, matrix, [1], two_dimensional=True)
+
     def test_integer_0_split(self):
         a = np.arange(10)
         assert_raises(ValueError, array_split, a, 0)
@@ -467,9 +520,9 @@ class TestSplit:
         assert_raises(ValueError, split, a, 3)
 
     def test_equal_two_dimensional_split(self):
-        matt = np.reshape(np.arange(16), (4, 4))
+        matrix = np.reshape(np.arange(16), (4, 4))
 
-        res = split(matt, [4, 2], 0, True)
+        res = split(matrix, [4, 2], 0, True)
         desired = [
             [[0, 1]],
             [[2, 3]],
@@ -482,7 +535,7 @@ class TestSplit:
         ]
         compare_results(res, desired)
 
-        res = split(matt, [2, 2], 0, True)
+        res = split(matrix, [2, 2], 0, True)
         desired = [
             [[0, 1], [4, 5]],
             [[2, 3], [6, 7]],
@@ -490,6 +543,13 @@ class TestSplit:
             [[10, 11], [14, 15]]
         ]
         compare_results(res, desired)
+
+    def test_unequal_two_dimensional_split(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+        assert_raises(ValueError, split, matrix, [3, 2], two_dimensional=True)
+        assert_raises(ValueError, split, matrix, [2, 3], two_dimensional=True)
+        assert_raises(ValueError, split, matrix, [2], two_dimensional=True)
+        assert_raises(ValueError, split, matrix, 3, two_dimensional=True)
 
 
 class TestColumnStack:

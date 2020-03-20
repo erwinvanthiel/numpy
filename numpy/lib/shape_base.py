@@ -762,7 +762,7 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
     if two_dimensional:
         try:
             indices_or_sections[1]
-        except AttributeError:
+        except (IndexError, TypeError):
             raise ValueError('indices_or_sections must be an array of length 2.')
 
         subarrays = array_split(ary, indices_or_sections[0], axis=0, two_dimensional=False)
@@ -886,7 +886,7 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
     if two_dimensional:
         try:
             indices_or_sections[1]
-        except AttributeError:
+        except (IndexError, TypeError):
             raise ValueError(
                 'indices_or_sections must be a list of length 2.')
         if verify_equal_division(indices_or_sections[0], 0) and verify_equal_division(indices_or_sections[1], 1):
