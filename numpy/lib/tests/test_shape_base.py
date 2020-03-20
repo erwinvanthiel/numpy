@@ -320,6 +320,24 @@ class TestExpandDims:
 class TestArraySplit:
 
 
+    def test_two_dimensional_two_integer_remainder_split(self):
+        matrix = np.reshape(np.arange(16), (4, 4))
+
+        res = array_split(matrix, [3, 3], 0, True)
+        desired = [
+            [[0, 1],
+            [4, 5]],
+            [[2], [6]],
+            [[3], [7]],
+            [[8, 9]],
+            [[10]],
+            [[11]],
+            [[12, 13]],
+            [[14]],
+            [[15]]
+        ]
+        compare_results(res, desired)
+
     def test_two_dimensional_two_integer_split(self):
         matrix = np.reshape(np.arange(16), (4, 4))
 
