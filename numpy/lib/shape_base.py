@@ -742,7 +742,8 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
     `indices_or_sections` to be an integer that does *not* equally
     divide the axis. For an array of length l that should be split
     into n sections, it returns l % n sub-arrays of size l//n + 1
-    and the rest of size l//n.
+    and the rest of size l//n. In the case where two_dimensional is set
+    to True, this holds for both elements of `indices_or_sections`.
 
     See Also
     --------
@@ -836,6 +837,12 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
         an empty sub-array is returned correspondingly.
     axis : int, optional
         The axis along which to split, default is 0.
+    two_dimensional : bool, optional
+        The array will be split along both axes 0 and 1, with
+        the first element of `indices_or_sections` as parameters
+        for axis 0, and the second for axis 1. Note that `indices_or_sections`
+        must be a list that might contain a list as one or both
+        of its elements. Default is False.
 
     Returns
     -------
@@ -847,6 +854,9 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
     ValueError
         If `indices_or_sections` is given as an integer, but
         a split does not result in equal division.
+
+        If `two_dimensional` is set to True and `indices_or_sections`
+        is not a list or contains fewer than two elements.
 
     See Also
     --------
@@ -903,14 +913,7 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
             return array_split(ary, indices_or_sections, axis, two_dimensional=True)
 
     verify_equal_division(indices_or_sections, axis)
-    # try:
-    #     len(indices_or_sections)
-    # except TypeError:
-    #     sections = indices_or_sections
-    #     N = ary.shape[axis]
-    #     if N % sections:
-    #         raise ValueError(
-    #             'array split does not result in an equal division')
+
     return array_split(ary, indices_or_sections, axis)
 
 
