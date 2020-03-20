@@ -759,6 +759,17 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
         [array([0.,  1.,  2.]), array([3.,  4.]), array([5.,  6.])]
 
     """
+    if two_dimensional:
+        try:
+            len(indices_or_sections)
+            first = indices_or_sections[0]
+            second = indices_or_sections[1]
+        except TypeError or AttributeError:
+            raise ValueError('indices_or_sections must be an array of length 2.')
+
+        subarray = array_split(ary, first, axis=0, two_dimensional=False)
+        return array_split(subarray, second, axis=1, two_dimensional=False)
+
     try:
         Ntotal = ary.shape[axis]
     except AttributeError:
@@ -878,9 +889,6 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
                 'indices_or_sections must be a list of length 2.')
         if len(indices_or_sections) == 2 and verify_equal_division(indices_or_sections[0], 0) and verify_equal_division(indices_or_sections[1], 1):
             return array_split(ary, indices_or_sections, axis, two_dimensional=True)
-
-
-
 
     verify_equal_division(indices_or_sections, axis)
     # try:
