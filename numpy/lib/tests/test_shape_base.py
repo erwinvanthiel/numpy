@@ -466,6 +466,31 @@ class TestSplit:
         a = np.arange(10)
         assert_raises(ValueError, split, a, 3)
 
+    def test_equal_two_dimensional_split(self):
+        matt = np.reshape(np.arange(16), (4, 4))
+
+        res = split(matt, [4, 2], 0, True)
+        desired = [
+            [[0, 1]],
+            [[2, 3]],
+            [[4, 5]],
+            [[6, 7]],
+            [[8, 9]],
+            [[10, 11]],
+            [[12, 13]],
+            [[14, 15]]
+        ]
+        compare_results(res, desired)
+
+        res = split(matt, [2, 2], 0, True)
+        desired = [
+            [[0, 1], [4, 5]],
+            [[2, 3], [6, 7]],
+            [[8, 9], [12, 13]],
+            [[10, 11], [14, 15]]
+        ]
+        compare_results(res, desired)
+
 
 class TestColumnStack:
     def test_non_iterable(self):

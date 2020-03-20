@@ -765,8 +765,12 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
         except AttributeError:
             raise ValueError('indices_or_sections must be an array of length 2.')
 
-        subarray = array_split(ary, indices_or_sections[0], axis=0, two_dimensional=False)
-        return array_split(subarray, indices_or_sections[1], axis=1, two_dimensional=False)
+        subarrays = array_split(ary, indices_or_sections[0], axis=0, two_dimensional=False)
+
+        res = []
+        for subarray in subarrays:
+            res.extend(array_split(subarray, indices_or_sections[1], axis=1, two_dimensional=False))
+        return res
 
     try:
         Ntotal = ary.shape[axis]
