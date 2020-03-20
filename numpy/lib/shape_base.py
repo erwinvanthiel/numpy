@@ -760,9 +760,17 @@ def array_split(ary, indices_or_sections, axis=0, two_dimensional=False):
         [array([0.,  1.,  2.]), array([3.,  4.]), array([5.,  6.])]
 
     >>> x = np.reshape(np.arange(16), (4, 4))
-    >>> np.array_split(matrix, [3, 3], 0, True)
-        [array([[0, 1]), array([4, 5]]), array([[2], [6]]),   array([[3], [7]]), array([[8, 9]]), array([[10]]),
-        array([[11]]), array([[12, 13]]), array([[14]]), array([[15]])]
+    >>> np.array_split(x, [3, 3], 0, True)
+        [array([[0, 1]),
+        array([4, 5]]),
+        array([[2], [6]]),
+        array([[3], [7]]),
+        array([[8, 9]]),
+        array([[10]]),
+        array([[11]]),
+        array([[12, 13]]),
+        array([[14]]),
+        array([[15]])]
 
     """
     if two_dimensional:
@@ -886,10 +894,16 @@ def split(ary, indices_or_sections, axis=0, two_dimensional=False):
      array([6.,  7.]),
      array([], dtype=float64)]
 
-     >>> x = np.reshape(np.arange(16), (4, 4))
-     >>> np.split(x, [4, 2], 0, True)
-    [array([[0, 1]]), array([[2, 3]]), array([[4, 5]]), array([[6, 7]]), array([[8, 9]]),
-    array([[10, 11]]),array([[12, 13]]), array([[14, 15]])]
+    >>> x = np.reshape(np.arange(16), (4, 4))
+    >>> np.split(x, [4, 2], 0, True)
+    [array([[0, 1]]),
+    array([[2, 3]]),
+    array([[4, 5]]),
+    array([[6, 7]]),
+    array([[8, 9]]),
+    array([[10, 11]]),
+    array([[12, 13]]),
+    array([[14, 15]])]
 
     """
 
